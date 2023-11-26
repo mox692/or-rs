@@ -1,0 +1,8 @@
+[workspace]
+members = [
+    "macros",
+    "or",
+    "tests",
+    "code_gen"
+]
+resolver = "2"
