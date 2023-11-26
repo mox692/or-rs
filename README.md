@@ -5,7 +5,7 @@ or-rs is a library that extends the syntax to allow different types to be return
 ## Usage
 Currently, the `or_gen!` macro supports Rust's `if` and `match` statement.
 
-### if expression
+**if expression**
 ```rust
 #![feature(proc_macro_hygiene)] // for now, you have to add this unstable feature flag
 
@@ -16,11 +16,11 @@ fn main() {
     // you have to add a type annotation **explicitly** for `x`.
     #[or_gen]
     let x: Or3<i32, String, f32> = if true {
-        3
+        3                   // this branch returns `i32`
     } else if false {
-        "hello".to_string()
+        "hello".to_string() // this branch returns `String`
     } else {
-        3.0
+        3.0                 // this branch returns `f32`
     };
 
     // Check if `x` is of type t2(=String)
@@ -32,7 +32,7 @@ fn main() {
 }
 ```
 
-### match expression
+**match expression**
 ```rust
 #![feature(proc_macro_hygiene)] // for now, you have to add this unstable feature flag
 
@@ -43,9 +43,9 @@ fn main() {
     // you have to add a type annotation **explicitly** for `x`.
     #[or_gen]
     let x: Or3<i32, f32, String> = match 42 {
-        1  => 22,
-        10 => 3.2,
-        _  => "hello".to_string(),
+        42 => 3,                   // this branch returns `i32`
+        10 => 3.2,                 // this branch returns `f32`
+        _  => "hello".to_string(), // this branch returns `String`
     };
 
     // map works **only** when the inner value of Or is i32.
@@ -67,7 +67,6 @@ let s = if true {
 } else if false {
     "tofs".to_string()
 } else {
-    11;
     3.0 // ERROR! `if` and `else` have incompatible types.
 };
 ```
@@ -84,7 +83,6 @@ let s: Or3<i32, String, f32> = if true {
 } else if false {
     "tofs".to_string()
 } else {
-    11;
     3.0
 };
 // -> OK: This compiles!
@@ -100,7 +98,6 @@ let s: Or3<i32, String, f32> = if true {
     Or3::<i32, String, f32>::T2("tofs".to_string())
 } else {
     {
-        11;
         Or3::<i32, String, f32>::T3(3.0)
     }
 };
