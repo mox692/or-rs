@@ -146,15 +146,17 @@ impl MacroParser {
         stmts
     }
 
+    // get `Or3::Or3<i32, i32, f32>`
     fn rewrite_method_name(&mut self, wraped_expr: TokenStream2) -> TokenStream2 {
         let typ_tok = self.parse_enum_type();
         let method_name: Ident = Ident::new(format!("T{}", self.depth).as_str(), Span::call_site());
+        let or_type_name = self.get_or_type_name();
         quote! {
-            Or3::#typ_tok::#method_name(#wraped_expr)
+            #or_type_name::#typ_tok::#method_name(#wraped_expr)
         }
     }
 
-    // get `Or3<i32, i32, f32>` and then return `Or3::<i32, i32, f32>`
+    // get `<i32, i32, f32>`
     fn parse_enum_type(&mut self) -> TokenStream2 {
         let angle_bracket_tok = match &(self.typ) {
             Type::Path(ptype) => match ptype.path.segments.first().cloned() {
@@ -167,5 +169,19 @@ impl MacroParser {
             _ => unreachable!(),
         };
         quote!(#angle_bracket_tok)
+    }
+
+    // get `Or3` from Or3<i32,f32,String>
+    fn get_or_type_name(&self) -> TokenStream2 {
+        let ty = &self.typ;
+        let str = quote!(#ty).to_string();
+        //
+        let idx = str
+            .find("<")
+            .unwrap_or_else(|| panic!("fail parse, expect token `,`. str: {}", str));
+        let substr = &str[0..idx];
+        substr
+            .parse()
+            .unwrap_or_else(|e| panic!("fail parse, expect token `,`. str: {}, error: {}", str, e))
     }
 }
