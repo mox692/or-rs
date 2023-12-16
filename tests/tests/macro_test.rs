@@ -1,7 +1,6 @@
 #![feature(proc_macro_hygiene)]
 
 use macros::or_gen;
-use or::enums::*;
 
 #[test]
 fn test_compile() {
@@ -23,6 +22,9 @@ fn test_compile() {
         "tofs".to_string()
     } else {
         11;
+        22;
+        let s = 33;
+        44;
         3.0
     };
 

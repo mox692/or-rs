@@ -1,10 +1,12 @@
 use proc_macro::TokenStream;
-use proc_macro2::Span;
+use proc_macro2::Span as Span2;
 use proc_macro2::TokenStream as TokenStream2;
 use quote::quote;
 use syn::Arm;
 use syn::ExprMatch;
 use syn::{Block, Expr, ExprIf, Ident, LocalInit, Pat, PathArguments, Stmt, Type};
+
+use crate::error::{Error, Result};
 
 // private macro parser
 pub(crate) struct MacroParser {
@@ -13,10 +15,26 @@ pub(crate) struct MacroParser {
 }
 
 impl MacroParser {
+    pub(crate) fn new(input_token_stream: TokenStream) -> Self {
+        let return_type = Self::get_return_type_from_input_token(input_token_stream.clone());
+
+        MacroParser {
+            depth: 0,
+            typ: return_type,
+        }
+    }
+
+    fn get_return_type_from_input_token(input_token_stream: TokenStream) -> Type {
+        todo!()
+    }
+}
+
+impl MacroParser {
     // parser's entry point
     pub(crate) fn parse(input: TokenStream) -> TokenStream {
-        let local = match syn::parse2::<Stmt>(input.clone().into()).unwrap() {
-            Stmt::Local(local) => local,
+        let local = match syn::parse2::<Stmt>(input.clone().into()) {
+            Ok(Stmt::Local(local)) => local,
+            Err(error) => panic!("{}", error),
             _ => panic!("expected Stmt::Local, but not"),
         };
         let let_tok = local.let_token;
@@ -26,6 +44,8 @@ impl MacroParser {
             None => unreachable!(),
             Some(local_init) => parser.parse_local_init(local_init),
         };
+
+        // TODO: check parse result err chack
 
         TokenStream::from(quote! { #let_tok #pat_tok #local_tok ;})
     }
@@ -149,7 +169,8 @@ impl MacroParser {
     // get `Or3::Or3<i32, i32, f32>`
     fn rewrite_method_name(&mut self, wraped_expr: TokenStream2) -> TokenStream2 {
         let typ_tok = self.parse_enum_type();
-        let method_name: Ident = Ident::new(format!("T{}", self.depth).as_str(), Span::call_site());
+        let method_name: Ident =
+            Ident::new(format!("T{}", self.depth).as_str(), Span2::call_site());
         let or_type_name = self.get_or_type_name();
         quote! {
             #or_type_name::#typ_tok::#method_name(#wraped_expr)
