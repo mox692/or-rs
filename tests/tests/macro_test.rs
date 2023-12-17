@@ -49,7 +49,7 @@ fn test_compile() {
 
     // simple match expr
     #[or_gen]
-    let s: Or3<i32, f32, String> = match a {
+    let s: Or3<i32, f32, String> = match 31 {
         1 => 33,
         3 => 3.2,
         _ => "hello".to_string(),

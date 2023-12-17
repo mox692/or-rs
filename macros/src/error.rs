@@ -14,7 +14,7 @@ use proc_macro::Span;
 use quote::ToTokens;
 use syn::spanned::Spanned;
 
-/// The result of a parser.
+/// The result type of a parser.
 pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug)]
@@ -84,7 +84,7 @@ impl Error {
                  {indent} {pipe} {offset}{underline} {message}\n\
                  ",
             error = "error".red().bold(),
-            header = ": Syn unable to parse file".bold(),
+            header = ": or-gen macro unable to parse file".bold(),
             indent = " ".repeat(start.line().to_string().len()),
             arrow = "-->".blue().bold(),
             filename = filename,
