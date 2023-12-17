@@ -1,7 +1,7 @@
 //! Macros for use with [Or](../or/trait.Or.html) type.
 
 // when compile with nightly, you need `proc_macro_span`
-#![feature(proc_macro_span)]
+#![cfg_attr(feature = "macro_error_debugging", feature(proc_macro_span))]
 
 #[allow(unused_extern_crates)]
 extern crate proc_macro;

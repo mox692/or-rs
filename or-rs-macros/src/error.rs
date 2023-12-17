@@ -1,22 +1,24 @@
 //! Internal error type for `proc_macro::Span`
 
 use core::fmt;
-use std::{
-    borrow::{Borrow, Cow},
-    ffi::OsStr,
-    fmt::Display,
-    fs,
-    path::{Path, PathBuf},
-};
-
-use colored::Colorize;
 use proc_macro::Span;
 use quote::ToTokens;
+use std::{borrow::Borrow, fmt::Display, path::PathBuf};
 use syn::spanned::Spanned;
 
-/// The result type of a parser.
-pub type Result<T> = std::result::Result<T, Error>;
+#[cfg(feature = "macro_error_debugging")]
+mod macro_error_debugging_deps {
+    pub use colored::Colorize;
+    pub use std::{borrow::Cow, ffi::OsStr, fs, path::Path};
+}
 
+#[cfg(feature = "macro_error_debugging")]
+use macro_error_debugging_deps::*;
+
+/// The result type of a parser.
+pub(crate) type Result<T> = std::result::Result<T, Error>;
+
+#[allow(dead_code)]
 #[derive(Debug)]
 pub(crate) struct Error {
     filepath: PathBuf,
@@ -30,18 +32,33 @@ impl Error {
     where
         T: ToTokens + Spanned + Borrow<T>,
     {
-        let file_path = err_tok.span().unwrap().source_file().path().clone();
-        let source_code = fs::read_to_string(&file_path).unwrap();
-        let span = err_tok.span().unwrap();
+        #[cfg(feature = "macro_error_debugging")]
+        {
+            let file_path = err_tok.span().unwrap().source_file().path().clone();
+            let source_code = fs::read_to_string(&file_path).unwrap();
+            let span = err_tok.span().unwrap();
 
-        Self {
-            filepath: file_path,
-            message: message,
-            span: span,
-            source_code: source_code,
+            Self {
+                filepath: file_path,
+                message: message,
+                span: span,
+                source_code: source_code,
+            }
+        }
+
+        #[cfg(not(feature = "macro_error_debugging"))]
+        {
+            let span = err_tok.span().unwrap();
+            Self {
+                filepath: PathBuf::new(),
+                message: message,
+                span: span,
+                source_code: "".to_string(),
+            }
         }
     }
 
+    #[cfg(feature = "macro_error_debugging")]
     fn render_location(
         formatter: &mut fmt::Formatter,
         message: &String,
@@ -103,6 +120,7 @@ impl Error {
     }
 }
 
+#[cfg(feature = "macro_error_debugging")]
 impl Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         Self::render_location(
@@ -112,5 +130,15 @@ impl Display for Error {
             &self.source_code,
             &self.span,
         )
+    }
+}
+
+#[cfg(not(feature = "macro_error_debugging"))]
+impl Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "
+        {error}\n
+        To see the more detailed cause of the error, You can use the `macro_error_debugging` feature in `or-rs-macros`.
+        ", error = self.message)
     }
 }

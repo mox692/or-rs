@@ -5,6 +5,7 @@ edition = "2021"
 authors = ["Motoyuki Kimura <moymoymox@gmail.com>"]
 readme = "README.md"
 license = "MIT"
+rust-version = "1.60"
 repository = "https://github.com/mox692/or-rs"
 description = """
 or-rs's proc macros.
@@ -12,13 +13,15 @@ or-rs's proc macros.
 categories = ["Development tools", "Parsing tools"]
 keywords = ["either", "macro", "or"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-quote = "1.0"
-colored = "2"
-proc-macro2 = { version =  "1", features = ["span-locations"]}
-syn = { version = "2.0.39", features = ["full", "visit", "extra-traits"] }
+quote = "1"
+colored = { version = "1", optional = true }
+proc-macro2 = { version =  "1", optional = true }
+syn = { version = "2.0", features = ["full"] }
+
+[features]
+default = ["proc-macro2"]
+macro_error_debugging = ["colored", "proc-macro2/span-locations"]
 
 [dev-dependencies]
 or-rs = { path = "../or-rs" }
