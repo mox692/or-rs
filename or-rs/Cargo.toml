@@ -9,7 +9,7 @@ repository = "https://github.com/mox692/or-rs"
 description = """
 or-rs's enum types.
 """
-categories = ["Development tools", "Parsing tools"]
+categories = ["development-tools", "Parsing tools"]
 keywords = ["either", "macro", "or"]
 rust-version = "1.60"
 
