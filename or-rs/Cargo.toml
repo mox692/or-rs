@@ -1,6 +1,6 @@
 [package]
 name = "or-rs"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Motoyuki Kimura <moymoymox@gmail.com>"]
 readme = "README.md"
