@@ -8,6 +8,6 @@ edition = "2021"
 [dependencies]
 
 [dev-dependencies]
-macros = { path = "../macros" }
-or = { path = "../or" }
+or-rs-macros = { path = "../or-rs-macros" }
+or-rs = { path = "../or-rs" }
 

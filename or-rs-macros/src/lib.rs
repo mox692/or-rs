@@ -22,8 +22,8 @@ use proc_macro::TokenStream;
 /// ```rust
 /// #![feature(proc_macro_hygiene)]
 ///
-/// use macros::or_gen;
-/// use or::enums::Or3;
+/// use or_rs_macros::or_gen;
+/// use or_rs::enums::Or3;
 ///
 /// #[or_gen]
 /// // add a type annotation explicitly
@@ -41,8 +41,8 @@ use proc_macro::TokenStream;
 /// ```rust
 /// #![feature(proc_macro_hygiene)]
 ///
-/// use macros::or_gen;
-/// use or::enums::Or3;
+/// use or_rs_macros::or_gen;
+/// use or_rs::enums::Or3;
 ///
 /// #[or_gen]
 /// // add a type annotation explicitly

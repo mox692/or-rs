@@ -1,11 +1,12 @@
 #![feature(proc_macro_hygiene)]
+#![allow(unused_variables)]
 
-use macros::or_gen;
+use or_rs_macros::or_gen;
 
 #[test]
 fn test_compile() {
-    use macros::or_gen;
-    use or::enums::*;
+    use or_rs::enums::*;
+    use or_rs_macros::or_gen;
 
     fn f1() -> i32 {
         42

@@ -1,7 +1,7 @@
 [workspace]
 members = [
-    "macros",
-    "or",
+    "or-rs-macros",
+    "or-rs",
     "tests",
     "code_gen"
 ]

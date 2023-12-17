@@ -16,6 +16,7 @@ pub(crate) struct MacroParser {
 }
 
 impl MacroParser {
+    #[allow(dead_code, unused_variables)]
     pub(crate) fn new(input_token_stream: TokenStream) -> Self {
         let return_type = Self::get_return_type_from_input_token(input_token_stream.clone());
 
@@ -25,6 +26,7 @@ impl MacroParser {
         }
     }
 
+    #[allow(dead_code, unused_variables)]
     fn get_return_type_from_input_token(input_token_stream: TokenStream) -> Type {
         todo!()
     }

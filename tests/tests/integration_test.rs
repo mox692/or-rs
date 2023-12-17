@@ -1,7 +1,7 @@
 #![feature(proc_macro_hygiene)] // for now, you have to add this unstable feature flag
 
-use macros::or_gen;
-use or::enums::*;
+use or_rs::enums::*;
+use or_rs_macros::or_gen;
 
 fn main() {
     #[or_gen]
@@ -50,8 +50,8 @@ mod test {
 
     #[test]
     fn test_or_gen() {
-        use macros::or_gen;
-        use or::enums::*;
+        use or_rs::enums::*;
+        use or_rs_macros::or_gen;
 
         #[or_gen]
         let x: Or3<i32, String, f32> = if true {
@@ -71,6 +71,7 @@ mod test {
         assert_eq!(z.as_t1().unwrap(), 9);
     }
 
+    #[allow(dead_code, unused_variables)]
     #[test]
     fn test_match() {
         let a = 3;

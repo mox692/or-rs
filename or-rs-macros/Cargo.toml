@@ -1,5 +1,5 @@
 [package]
-name = "macros"
+name = "or-rs-macros"
 version = "0.1.0"
 edition = "2021"
 
@@ -12,7 +12,7 @@ proc-macro2 = { version =  "1", features = ["span-locations"]}
 syn = { version = "2.0.39", features = ["full", "visit", "extra-traits"] }
 
 [dev-dependencies]
-or = { path = "../or" }
+or-rs = { path = "../or-rs" }
 
 [lib]
 proc-macro = true
