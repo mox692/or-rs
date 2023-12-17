@@ -10,7 +10,7 @@ repository = "https://github.com/mox692/or-rs"
 description = """
 or-rs's proc macros.
 """
-categories = ["development-tools", "Parsing tools"]
+categories = ["development-tools", "parsing"]
 keywords = ["either", "macro", "or"]
 
 [dependencies]

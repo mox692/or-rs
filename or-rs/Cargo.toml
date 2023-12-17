@@ -1,6 +1,6 @@
 [package]
 name = "or-rs"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["Motoyuki Kimura <moymoymox@gmail.com>"]
 readme = "README.md"
@@ -9,7 +9,7 @@ repository = "https://github.com/mox692/or-rs"
 description = """
 or-rs's enum types.
 """
-categories = ["development-tools", "Parsing tools"]
+categories = ["development-tools", "parsing"]
 keywords = ["either", "macro", "or"]
 rust-version = "1.60"
 
