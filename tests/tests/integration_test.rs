@@ -1,7 +1,6 @@
 #![feature(proc_macro_hygiene)] // for now, you have to add this unstable feature flag
 
 use or_rs::enums::*;
-use or_rs_macros::my_first_proc_macro;
 use or_rs_macros::or_gen;
 
 fn main() {
