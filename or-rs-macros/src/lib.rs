@@ -58,3 +58,56 @@ use proc_macro::TokenStream;
 pub fn or_gen(_attr: TokenStream, item: TokenStream) -> TokenStream {
     parser::MacroParser::parse(item)
 }
+
+#[proc_macro]
+pub fn my_first_proc_macro(item: TokenStream) -> TokenStream {
+    item
+}
+
+use proc_macro::TokenStream;
+use quote::quote;
+use syn::*;
+
+#[proc_macro_attribute]
+pub fn add_print(_attr: TokenStream, item: TokenStream) -> TokenStream {
+    // 入力をItemFn(関数を表現する構文木データ型に変換)
+    let input: ItemFn = parse_macro_input!(item as ItemFn);
+    // 関数名を取得
+    let name = &input.sig.ident;
+    // 関数のブロックを取得
+    let block = &input.block;
+
+    // quoteマクロでproc_macro2::TokenStreamを生成
+    let expanded: proc_macro2::TokenStream = quote! {
+        fn #name() {
+            println!("Function {} is called", stringify!(#name));
+            #block
+        }
+    };
+
+    // proc_macro2::TokenStreamからTokenStreamに変換
+    TokenStream::from(expanded)
+}
+
+use proc_macro::{TokenStream, TokenTree};
+
+#[proc_macro_attribute]
+pub fn log(attr: TokenStream, item: TokenStream) -> TokenStream {
+    let mut iter = item.into_iter();
+
+    if let Some(TokenTree::Ident(ident)) = iter.next() {
+        let func_name = ident.to_string();
+        let rest_of_stream: TokenStream = iter.collect();
+
+        let new_stream = format!(
+            "fn {}() {{ println!(\"Function '{}' called\"); {} }}",
+            func_name, func_name, rest_of_stream
+        );
+        new_stream.parse().unwrap()
+    } else {
+        // トークンストリームが関数宣言でない場合はエラー
+        "compile_error!(\"Expected function declaration\")"
+            .parse()
+            .unwrap()
+    }
+}

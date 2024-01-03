@@ -1,6 +1,8 @@
 #![feature(proc_macro_hygiene)]
 #![allow(unused_variables)]
 
+use or_rs_macros::add_print;
+use or_rs_macros::my_first_proc_macro;
 use or_rs_macros::or_gen;
 
 #[test]
@@ -56,3 +58,11 @@ fn test_compile() {
         _ => "hello".to_string(),
     };
 }
+
+// fn foo() {
+//     my_first_proc_macro!(42);
+// }
+
+#[test]
+#[add_print]
+fn your_function() {}
